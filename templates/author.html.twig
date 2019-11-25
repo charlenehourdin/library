@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+
+        <div class="content">
+            <a class="img" href="https://placeholder.com"><img src="https://via.placeholder.com/250x150"></a>
+            <h1>{{ author.name }}</h1>
+            <h1>{{ author.firstName }}</h1>
+            <hr>
+            <h3>Date de naissance : </h3>
+            <p>{{ author.birthDate | date('d/m/Y')}}</p>
+
+            {% if author.deathDate == true %}
+                <h3>Date de décès : </h3>
+                <p>{{ author.deathDate | date('d/m/Y')}}</p>
+            {% elseif author.deathDate == false %}
+                <h3>Date de décès : </h3>
+                <p>Non définis</p>
+
+                </div>
+
+            {% endif %}
+
+            <a href="{{ path('author', {'id': author.id}) }}"></a>
+{% endblock %}

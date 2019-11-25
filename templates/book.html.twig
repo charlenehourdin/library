@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+
+        <div class="content">
+            <a href="https://placeholder.com"><img src="https://via.placeholder.com/350x150"></a>
+            <h1>{{ book.title }}</h1>
+
+            <h3>Nombre de pages :</h3>
+            <p>{{ book.nbPage }}</p>
+
+            <h3>Style de book :</h3>
+            <p>{{ book.style}}</p>
+
+            <h3>Disponibilité :</h3>
+
+            {% if book.inStock == true %}
+                <p>Oui</p>
+            {% elseif book.inStock == false %}
+                <p>Non</p>
+            {% endif %}
+            <a href="{{path('book', {'id': book.id}) }}"></a>
+        </div>
+
+
+{% endblock %}

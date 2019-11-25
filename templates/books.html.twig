@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    {% for book in books %}
+        <div class="content">
+            <a href="https://placeholder.com"><img src="https://via.placeholder.com/350x150"></a>
+        <h1>{{ book.title }}</h1>
+            <a class="btn" href="{{path('book', {'id': book.id})}}">Voir le livre</a>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
