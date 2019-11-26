@@ -2,12 +2,11 @@
 
 {% block content %}
 
-    {% for author in authors %}
         <div class="content">
             <a href="{{path('author', {'id': author.id}) }}" >{{ author.name }}</a>
 
+
         </div>
 
-    {% endfor %}
 
 {% endblock %}

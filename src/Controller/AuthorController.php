@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Author;
 use App\Repository\AuthorRepository;
-use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,6 +64,27 @@ class AuthorController extends AbstractController
         $authors = $authorRepository->getByBiography($word);
         return $this->render('bio.html.twig', ['author' => $authors]);
 
+    }
+    /**
+     * @Route("/authors/insert", name="authors_insert")
+     */
+    public function insertAuthors(EntityManagerInterface $entityManager)
+    {
+        // Insérer dans la table book un nouvelle auteur
+        $author = new Author();
+        $author->setName('Franck');
+        $author->setFirstName('Anne');
+        $author->setBirthDate(new \DateTime('12-06-1929'));
+        $author->setDeathDate(new \DateTime('00-02-1945'));
+        $author->setBiography('Annelies Marie Frank, plus connue sous le nom d’Anne Frank, 
+                                         née le 12 juin 1929 à Francfort-sur-le-Main en Allemagne,
+                                        sous la République de Weimar, et morte en février 1945 ou mars 1945 à Bergen-Belsen en Allemagne nazie, 
+                                         est une adolescente allemande, connue pour avoir écrit un journal intime.');
+
+        $entityManager->persist($author);
+        $entityManager->flush();
+
+        return $this->render('insertAuthor.html.twig', ['author' => $author]);
     }
 
 }

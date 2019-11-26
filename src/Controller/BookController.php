@@ -4,7 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
-use App\Repository\AuthorRepository;
+
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +40,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/books_by_genre", name="books_by_genre")
+     * @Route("/books/search", name="books_search")
      */
     public function getBooksByGenre(BookRepository $bookRepository)
     {
@@ -51,6 +51,23 @@ class BookController extends AbstractController
         $books = $bookRepository->getByGenre();
         dump($books);die;
 
+    }
+    /**
+     * @Route("/books/insert", name="books_insert")
+     */
+    public function insertBook(EntityManagerInterface $entityManager)
+    {
+        // Insérer dans la table book un nouveau livre
+        $book = new Book();
+        $book->setTitle('titre');
+        $book->setStyle('Escroquerie');
+        $book->setInstock(true);
+        $book->setNbPage(288);
+
+        $entityManager->persist($book);
+        $entityManager->flush();
+
+        return $this->render('insert.html.twig', ['book' => $book]);
     }
 }
 
