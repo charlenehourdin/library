@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div>
+    <h1>Merci votre livre est bien enregistré : </h1>
+
+    <div class="content">
+        <a href="{{path('book', {'id': book.id}) }}"></a>
+        <h1>Titre du livre : </h1>
+        <p>{{ book.title }}</p>
+
+        <h1>Nombre de pages :</h1>
+        <p>{{ book.nbPage }}</p>
+
+        <h1>Style de book :</h1>
+        <p>{{ book.style}}</p>
+
+
+    </div>
+    </div>
+
+{% endblock %}
