@@ -39,6 +39,21 @@ class Author
      */
     private $deathDate;
 
+    /**
+     * @ORM\Column(type="string", length=5000)
+     */
+    private $biography;
+
+    /**
+     * @ORM\Column(type="string", length=5000)
+     */
+    private $clear;
+
+    /**
+     * @ORM\Column(type="string", length=5000)
+     */
+    private $bio;
+
 
     public function getId(): ?int
     {
@@ -89,6 +104,41 @@ class Author
     public function setDeathDate(\DateTimeInterface $deathDate): self
     {
         $this->deathDate = $deathDate;
+
+        return $this;
+    }
+
+    public function getBiography(): ?string
+    {
+        return $this->biography;
+    }
+
+    public function setBiography(string $biography): self
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+    public function getClear(): ?string
+    {
+        return $this->clear;
+    }
+
+    public function setClear(string $clear): self
+    {
+        $this->clear = $clear;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(string $bio): self
+    {
+        $this->bio = $bio;
 
         return $this;
     }

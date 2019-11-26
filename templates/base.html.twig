@@ -17,10 +17,19 @@
         <h1>Librairie</h1>
     </div>
     <div class="lien">
-            <a href="{{('authors') }}">Les Auteurs</a>
-            <a href="{{('books') }}">Les Livres</a>
+            <a href="{{ path('authors') }}">Les Auteurs</a>
+            <a href="{{ path('books') }}">Les Livres</a>
+        <div class ="search"><!-- Load icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+        <!-- The form -->
+        <form class="example" action="getByBiography">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        </div>
     </div>
+
 </header>
 
 <main>

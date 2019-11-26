@@ -19,32 +19,27 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
-    // /**
-    //  * @return Author[] Returns an array of Author objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+       public function getByBiography()
+       {
+           // Récupérer le query builder (car c'est le query builder qui permet de faire la requête SQL)
 
-    /*
-    public function findOneBySomeField($value): ?Author
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+           $word ='ecrivain';
+           $queryBuilder = $this->createQueryBuilder('a');
+
+           //CreateQueryBuilder = createur de requetes SQL
+
+           // On construit la requête façon SQL, mais en PHP
+           // Traduire la requête en véritable requête SQL
+
+           $query = $queryBuilder->select('a')
+                ->where('a.biography LIKE :word')
+               //where creer la condition
+                ->setParameter('word', '%'.$word.'%')
+               // setParameter permet d'echapper ce que l'utilisateur rentre il securise la requete
+                ->getQuery();
+
+           // - Executer la requête SQL en base de données pour récupérer sous forme de tableau
+           $author = $query->getArrayResult();
+           return $author;
+       }
 }
