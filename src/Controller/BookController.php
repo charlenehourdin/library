@@ -58,17 +58,44 @@ class BookController extends AbstractController
     public function insertBook(EntityManagerInterface $entityManager)
     {
         // Insérer dans la table book un nouveau livre
+        // Book = entité
+        // new book = instance de la classe Book
+        // j'instancie l'entité book afin de créer des données dans chaque colonne
+        // de ma table en utilisant les setters de chaque colonne
+
         $book = new Book();
-        $book->setTitle('titre');
-        $book->setStyle('Escroquerie');
+        $book->setTitle("Le temps d'un automne");
+        $book->setStyle('Drame');
         $book->setInstock(true);
-        $book->setNbPage(288);
+        $book->setNbPage(355);
 
         $entityManager->persist($book);
         $entityManager->flush();
 
         return $this->render('insert.html.twig', ['book' => $book]);
     }
+
+    //Pouvoir supprimer un book en BDD
+
+    /**
+     * @Route("/books/delete{id}", name="books_delete")
+     */
+    public function deleteBook(BookRepository $bookRepository, EntityManagerInterface $entityManager, $id)
+    {
+            $book = $bookRepository->find($id);
+            $entityManager->remove($book);
+            $entityManager->flush();
+
+        return $this->render('deleteBook.html.twig', ['book' => $book]);
+    }
+
+    //Mettre a jour un book en BDD
+
+    /**
+     * @Route("/book/update", name="book_update")
+     */
+
 }
+
 
 

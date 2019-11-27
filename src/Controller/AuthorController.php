@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Author;
 use App\Repository\AuthorRepository;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -72,19 +73,28 @@ class AuthorController extends AbstractController
     {
         // Insérer dans la table book un nouvelle auteur
         $author = new Author();
-        $author->setName('Franck');
-        $author->setFirstName('Anne');
-        $author->setBirthDate(new \DateTime('12-06-1929'));
-        $author->setDeathDate(new \DateTime('00-02-1945'));
-        $author->setBiography('Annelies Marie Frank, plus connue sous le nom d’Anne Frank, 
-                                         née le 12 juin 1929 à Francfort-sur-le-Main en Allemagne,
-                                        sous la République de Weimar, et morte en février 1945 ou mars 1945 à Bergen-Belsen en Allemagne nazie, 
-                                         est une adolescente allemande, connue pour avoir écrit un journal intime.');
+        $author->setName('Spark');
+        $author->setFirstName('Nicolas');
+        $author->setBirthDate(new \DateTime('31-12-1965'));
+        $author->setDeathDate(new \DateTime(''));
+        $author->setBiography('Nicholas Sparks, né le 31 décembre 1965 à Omaha, au Nebraska, est un écrivain américain.
+                                        Ses romans évoquent les rencontres amoureuses et l\'amour en général.');
 
         $entityManager->persist($author);
         $entityManager->flush();
 
         return $this->render('insertAuthor.html.twig', ['author' => $author]);
+    }
+    /**
+     * @Route("/authors/delete{id}", name="authors_delete")
+     */
+    public function deleteBook(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
+    {
+        $authors = $authorRepository->find($id);
+        $entityManager->remove($authors);
+        $entityManager->flush();
+
+        return $this->render('deleteAuthor.html.twig', ['authors' => $authors]);
     }
 
 }
