@@ -24,6 +24,8 @@ class BookController extends AbstractController
         return $this->render('books.html.twig', ['books' => $books]);
 
     }
+
+    // Selectionner un livre en BDD
     /**
      * @Route ("/book/{id}", name="book")
      */
@@ -52,6 +54,7 @@ class BookController extends AbstractController
         dump($books);die;
 
     }
+    // Inserer un livre en BDD
     /**
      * @Route("/books/insert", name="books_insert")
      */
@@ -75,7 +78,7 @@ class BookController extends AbstractController
         return $this->render('insert.html.twig', ['book' => $book]);
     }
 
-    //Pouvoir supprimer un book en BDD
+    // Supprimer un book en BDD
 
     /**
      * @Route("/books/delete{id}", name="books_delete")
@@ -89,12 +92,26 @@ class BookController extends AbstractController
         return $this->render('deleteBook.html.twig', ['book' => $book]);
     }
 
-    //Mettre a jour un book en BDD
+    //Mettre à jour un book en BDD
 
     /**
-     * @Route("/book/update", name="book_update")
+     * @Route("/books/update{id}", name="books_update")
      */
+    public function updateBook(BookRepository $bookRepository, EntityManagerInterface $entityManager, $id)
+    {
+        //J'utilise le repository de l'entité Book pour récupérer un livre en fonction de son id
+        $book = $bookRepository->find($id);
 
+        //Je donne un nouveau titre à mon entité Book
+        $book->setTitle("Le temps d'un automne");
+        $book->setStyle("Drame");
+
+        // Je re-enregistre mon livre en BDD avec l'entité manager
+        $entityManager->persist($book);
+        $entityManager->flush();
+
+         return $this->render('updateBook.html.twig', ['book' => $book]);
+    }
 }
 
 

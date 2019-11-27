@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthorController extends AbstractController
 {
+
+    //Je selectionne un auteur en BDD
+
     /**
      * 1er parametre = chemin de l'url
      * 2eme parametre = nom de la route (identifiant pour pouvoir retrouver le chemin)
@@ -31,6 +34,7 @@ class AuthorController extends AbstractController
 
         return $this->render('authors.html.twig', ['authors' => $authors]);
     }
+
     /**
      * @Route ("/author/{id}", name="author")
      */
@@ -65,7 +69,10 @@ class AuthorController extends AbstractController
         $authors = $authorRepository->getByBiography($word);
         return $this->render('bio.html.twig', ['author' => $authors]);
 
+
     }
+
+    // j'ajoute un nouvel auteur en BDD
     /**
      * @Route("/authors/insert", name="authors_insert")
      */
@@ -85,6 +92,8 @@ class AuthorController extends AbstractController
 
         return $this->render('insertAuthor.html.twig', ['author' => $author]);
     }
+    //Je supprime mon auteur en BDD
+
     /**
      * @Route("/authors/delete{id}", name="authors_delete")
      */
@@ -95,6 +104,26 @@ class AuthorController extends AbstractController
         $entityManager->flush();
 
         return $this->render('deleteAuthor.html.twig', ['authors' => $authors]);
+    }
+    //Mettre à jour un auteur en BDD
+
+    /**
+     * @Route("/authors/update{id}", name="authors_update")
+     */
+    public function updateAuthor(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
+    {
+        //J'utilise le repository de l'entité Author pour récupérer un auteur en fonction de son id
+        $author = $authorRepository->find($id);
+
+        //Je change le nom et le prenom de mon auteur
+        $author->setName('Spark');
+        $author->setFirstName("Nicolas");
+
+        // Je re-enregistre mon auteur en BDD avec l'entité manager
+        $entityManager->persist($author);
+        $entityManager->flush();
+
+        return $this->render('updateAuthor.html.twig', ['author' => $author]);
     }
 
 }
