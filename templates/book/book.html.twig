@@ -20,7 +20,7 @@
             {% elseif book.inStock == false %}
                 <p>Non</p>
             {% endif %}
-            <a href="{{path('book', {'id': book.id}) }}"></a>
+            <a href="{{path('books', {'id': book.id}) }}"></a>
         </div>
 
 

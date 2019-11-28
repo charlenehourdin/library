@@ -4,10 +4,14 @@
 namespace App\Controller;
 
 use App\Entity\Author;
+use App\Entity\Book;
+use App\Form\AuthorType;
+use App\Form\BookType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -15,11 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthorController extends AbstractController
 {
 
-    //Je selectionne un auteur en BDD
-
     /**
-     * 1er parametre = chemin de l'url
-     * 2eme parametre = nom de la route (identifiant pour pouvoir retrouver le chemin)
      * @Route ("/authors", name="authors")
      */
 
@@ -32,22 +32,10 @@ class AuthorController extends AbstractController
         //findAll permet de récupérer tout les element de ma table author
         $authors = $authorRepository->findAll();
 
-        return $this->render('authors.html.twig', ['authors' => $authors]);
+        return $this->render('author/authors.html.twig', ['authors' => $authors]);
     }
 
-    /**
-     * @Route ("/author/{id}", name="author")
-     */
 
-
-    public function Author (AuthorRepository $authorRepository, $id)
-    {
-        // j'utilise le repository de author afin de pouvoir selectionner l'id de l'élèments de ma table
-        // find permet de récupéré un element de ma table author
-        $author = $authorRepository->find($id);
-
-        return $this->render('author.html.twig', ['author' => $author]);
-    }
 
     /**
      * @Route("/authors_by_biography", name="authors_by_biography")
@@ -67,14 +55,14 @@ class AuthorController extends AbstractController
         // Généralement on obtient une instance de classe (ou un objet) en utilisant le mot clé "new"
         // ici, grace à symfony, on obtient l'instance de la classe repository en la passant simplement en paramètre
         $authors = $authorRepository->getByBiography($word);
-        return $this->render('bio.html.twig', ['author' => $authors]);
+        return $this->render('author/bio.html.twig', ['author' => $authors]);
 
 
     }
 
     // j'ajoute un nouvel auteur en BDD
     /**
-     * @Route("/authors/insert", name="authors_insert")
+     * @Route("/author/insert", name="author_insert")
      */
     public function insertAuthors(EntityManagerInterface $entityManager)
     {
@@ -90,12 +78,12 @@ class AuthorController extends AbstractController
         $entityManager->persist($author);
         $entityManager->flush();
 
-        return $this->render('insertAuthor.html.twig', ['author' => $author]);
+        return $this->render('author/insertAuthor.html.twig', ['author' => $author]);
     }
     //Je supprime mon auteur en BDD
 
     /**
-     * @Route("/authors/delete{id}", name="authors_delete")
+     * @Route("/author/delete{id}", name="author_delete")
      */
     public function deleteBook(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
     {
@@ -103,12 +91,71 @@ class AuthorController extends AbstractController
         $entityManager->remove($authors);
         $entityManager->flush();
 
-        return $this->render('deleteAuthor.html.twig', ['authors' => $authors]);
+        return $this->render('author/deleteAuthor.html.twig', ['authors' => $authors]);
+    }
+
+    /**
+     * @Route("/author/insert_form", name="author_insert_form")
+     */
+    public function insertAuthorForm(Request $request, EntityManagerInterface $entityManager)
+    {
+
+        $author = new Author();
+
+        $authorForm = $this->createForm(AuthorType::class, $author);
+
+        if ($request->isMethod('Post')) {
+
+            $authorForm->handleRequest($request);
+
+            if ($authorForm->isValid()) {
+
+                $entityManager->persist($author);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('author_insert');
+            }
+        }
+        // à partir de mon gabarit, je crée la vue de mon formulaire
+        $authorFormView = $authorForm->createView();
+        // je retourne un fichier twig, et je lui envoie ma variable qui contient
+        // mon formulaire
+        return $this->render('author/insert_form.html.twig', [
+            'authorFormView' => $authorFormView
+        ]);
+    }
+
+//modifier les données en BDD avec le formulaire
+
+    /**
+     * @Route("/author/update_form{id}", name="author_update_form")
+     */
+    public function updateAuthorForm(AuthorRepository $authorRepository, Request $request, EntityManagerInterface $entityManager, $id)
+    {
+        $author = $authorRepository->find($id);
+        $authorForm = $this->createForm(AuthorType::class, $author);
+        if ($request->isMethod('Post'))
+        {
+            $authorForm->handleRequest($request);
+            if ($authorForm->isValid()) {
+
+                $entityManager->persist($author);
+                $entityManager->flush();
+                return $this->redirectToRoute('author_update',['id'=> $id]);
+            }
+        }
+        // à partir de mon gabarit, je crée la vue de mon formulaire
+        $authorFormView = $authorForm->createView();
+        // je retourne un fichier twig, et je lui envoie ma variable qui contient
+        // mon formulaire
+        return $this->render('author/update_form.html.twig', [
+            'authorFormView' => $authorFormView
+        ]);
     }
     //Mettre à jour un auteur en BDD
 
     /**
-     * @Route("/authors/update{id}", name="authors_update")
+     * @Route("/author/update{id}", name="author_update")
      */
     public function updateAuthor(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
     {
@@ -123,7 +170,25 @@ class AuthorController extends AbstractController
         $entityManager->persist($author);
         $entityManager->flush();
 
-        return $this->render('updateAuthor.html.twig', ['author' => $author]);
+        return $this->render('author/updateAuthor.html.twig', ['author' => $author]);
+    }
+    //Je selectionne un auteur en BDD
+
+
+    // 1er parametre = chemin de l'url
+    // 2eme parametre = nom de la route (identifiant pour pouvoir retrouver le chemin)
+    /**
+     * @Route ("/author/{id}", name="author")
+     */
+
+
+    public function Author (AuthorRepository $authorRepository, $id)
+    {
+        // j'utilise le repository de author afin de pouvoir selectionner l'id de l'élèments de ma table
+        // find permet de récupéré un element de ma table author
+        $author = $authorRepository->find($id);
+
+        return $this->render('author/author.html.twig', ['author' => $author]);
     }
 
 }

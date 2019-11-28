@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+{# je crée le html de mon formulaire (balise form, input etc) en utilisant la fonction
+ form() avec en parametre ma variable de formulaire  #}
+
+    <div class ="title_add">
+        <h1>Ajouter un livre</h1>
+        {{ form(bookFormView) }}
+    </div>
+
+
+{% endblock %}
