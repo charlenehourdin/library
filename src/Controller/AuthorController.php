@@ -20,6 +20,22 @@ class AuthorController extends AbstractController
 {
 
     /**
+     * @Route ("/admin_authors", name="admin_authors")
+     */
+
+    //méthode qui permet de faire un select en BDD de l'ensemble de mes champs dans ma table author
+    public function AdminAuthorList (AuthorRepository $authorRepository)
+    {
+        // j'utilise le repository de author afin de pouvoir selectionner tous les élèments de ma table
+        //Les repository en général servent à faire les requêtes select dans les tables de ma BDD
+
+        //findAll permet de récupérer tout les element de ma table author
+        $authors = $authorRepository->findAll();
+
+        return $this->render('admin/author/authors.html.twig', ['authors' => $authors]);
+    }
+
+    /**
      * @Route ("/authors", name="authors")
      */
 
@@ -38,7 +54,7 @@ class AuthorController extends AbstractController
 
 
     /**
-     * @Route("/authors_by_biography", name="authors_by_biography")
+     * @Route("authors_by_biography", name="authors_by_biography")
      */
         //l'url "/authors_by_biography" qui a le nom "authors_by_biography" retourne la methode suivante :
 
@@ -83,7 +99,7 @@ class AuthorController extends AbstractController
     //Je supprime mon auteur en BDD
 
     /**
-     * @Route("/author/delete{id}", name="author_delete")
+     * @Route("Admin/author/delete{id}", name="author_delete")
      */
     public function deleteBook(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
     {
@@ -91,11 +107,11 @@ class AuthorController extends AbstractController
         $entityManager->remove($authors);
         $entityManager->flush();
 
-        return $this->render('author/deleteAuthor.html.twig', ['authors' => $authors]);
+        return $this->render('Admin/author/deleteAuthor.html.twig', ['authors' => $authors]);
     }
 
     /**
-     * @Route("/author/insert_form", name="author_insert_form")
+     * @Route("author/insert_form", name="author_insert_form")
      */
     public function insertAuthorForm(Request $request, EntityManagerInterface $entityManager)
     {
@@ -128,7 +144,7 @@ class AuthorController extends AbstractController
 //modifier les données en BDD avec le formulaire
 
     /**
-     * @Route("/author/update_form{id}", name="author_update_form")
+     * @Route("author/update_form{id}", name="author_update_form")
      */
     public function updateAuthorForm(AuthorRepository $authorRepository, Request $request, EntityManagerInterface $entityManager, $id)
     {
@@ -155,7 +171,7 @@ class AuthorController extends AbstractController
     //Mettre à jour un auteur en BDD
 
     /**
-     * @Route("/author/update{id}", name="author_update")
+     * @Route("author/update{id}", name="author_update")
      */
     public function updateAuthor(AuthorRepository $authorRepository, EntityManagerInterface $entityManager, $id)
     {
@@ -178,7 +194,7 @@ class AuthorController extends AbstractController
     // 1er parametre = chemin de l'url
     // 2eme parametre = nom de la route (identifiant pour pouvoir retrouver le chemin)
     /**
-     * @Route ("/author/{id}", name="author")
+     * @Route ("author/{id}", name="author")
      */
 
 

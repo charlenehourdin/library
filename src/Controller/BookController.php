@@ -19,13 +19,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     /**
-     * @Route ("/books", name="books")
+     * @Route ("admin_books", name="admin_books")
+     */
+
+    public function BooksAdminList(BookRepository $bookRepository)
+    {
+        $books = $bookRepository->findAll();
+        return $this->render('admin/book/books.html.twig', ['books' => $books]);
+
+    }
+    /**
+     * @Route ("books", name="books")
      */
 
     public function BooksList(BookRepository $bookRepository)
     {
         $books = $bookRepository->findAll();
         return $this->render('book/books.html.twig', ['books' => $books]);
+
 
     }
 
